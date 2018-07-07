@@ -5,7 +5,6 @@ const ssm = require('aws-ssm-params')
 const Bamboo = require('../lib/bamboo-api')
 const config = require('../config.json')
 
-
 beforeAll(() => {
   return ssm(config.ssm).then(function(params) {
     config.bamboo.apiKey = params['bamboo-api-key']
