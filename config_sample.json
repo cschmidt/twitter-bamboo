@@ -1,0 +1,12 @@
+{
+  "ssm": {
+    "Path": "/my-demo-env",
+    "WithDecryption": true
+  },
+  "bamboo": {
+    "subdomain": "[your BambooHR domain]"
+  },
+  "twitter": {
+
+  }
+}
