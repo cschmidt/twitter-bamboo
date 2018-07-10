@@ -1,14 +1,14 @@
 'use strict'
 /* global test expect */
 const config = require('../config.json')
-const Twitter = require('../lib/twitter-api')
+const Twitter = new(require('../lib/twitter-api'))(config.twitter)
 
 
 test('gets list members from Twitter', () => {
-  const Api = new Twitter(config.twitter)
-  return Api.listMembers().then(listMembers => {
+  return Twitter.listMembers().then(listMembers => {
     // let { id, name, screen_name } = listMembers[0]
     // console.log(id, name, screen_name)
+    console.log('Retrieved', listMembers.length, 'list members')
     expect(listMembers.length).toBeGreaterThan(0)
   })
 })
