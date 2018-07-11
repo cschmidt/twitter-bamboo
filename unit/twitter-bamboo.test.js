@@ -17,6 +17,7 @@ test('indexes employees and list members by screen name', () => {
   let employeesByScreenName = new Map()
   employeesByScreenName.set('s1', { screenName: 's1' })
   employeesByScreenName.set('s2', { screenName: 's2' })
+  employeesByScreenName.set('s4', { screenName: 's4' })
 
   let listMembersByScreenName = new Map()
   listMembersByScreenName.set('s2', { screenName: 's2' })
