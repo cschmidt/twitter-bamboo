@@ -7,6 +7,7 @@ test('parses screen names', () => {
   let screenNames = ['screenName', '@screenName', 'http://twitter.com/screenName',
     'https://twitter.com/screenName'
   ]
+  // FIXME: populate with a real test
   for (const screenName of screenNames) {
     expect(screenName.split(/\/|@/).pop()).toBe('screenName')
   }
@@ -23,6 +24,5 @@ test('indexes employees and list members by screen name', () => {
   listMembersByScreenName.set('s2', { screenName: 's2' })
   listMembersByScreenName.set('s3', { screenName: 's3' })
 
-  console.log(_.difference(Array.from(employeesByScreenName.keys()), Array.from(listMembersByScreenName.keys())))
-  console.log(_.difference(Array.from(listMembersByScreenName.keys()), Array.from(employeesByScreenName.keys())))
+  //FIXME: populate with a real test
 })
