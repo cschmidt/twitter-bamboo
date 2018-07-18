@@ -1,28 +1,25 @@
 'use strict'
-/* global test expect */
-// import { extractScreenNames } from 'twitter-bamboo'
-var _ = require('lodash')
+/* global test expect beforeAll */
+const TwitterBamboo = require('../lib/twitter-bamboo')
+const config = require('../config.json')
+const ssm = require('aws-ssm-params')
+
+beforeAll(() => {
+  return ssm(config.ssm).then(params => {
+    config.bamboo.apiKey = params['bamboo-api-key']
+  })
+})
 
 test('parses screen names', () => {
+  const twitterBamboo = new TwitterBamboo(config)
   let screenNames = ['screenName', '@screenName', 'http://twitter.com/screenName',
     'https://twitter.com/screenName'
   ]
-  // FIXME: populate with a real test
   for (const screenName of screenNames) {
-    expect(screenName.split(/\/|@/).pop()).toBe('screenName')
+    expect(twitterBamboo.parseScreenName(screenName)).toBe('screenName')
   }
-  // expect(extractScreenNames([employee])).toBe([{ screenName: 'screenName' }])
 })
 
 test('indexes employees and list members by screen name', () => {
-  let employeesByScreenName = new Map()
-  employeesByScreenName.set('s1', { screenName: 's1' })
-  employeesByScreenName.set('s2', { screenName: 's2' })
-  employeesByScreenName.set('s4', { screenName: 's4' })
-
-  let listMembersByScreenName = new Map()
-  listMembersByScreenName.set('s2', { screenName: 's2' })
-  listMembersByScreenName.set('s3', { screenName: 's3' })
-
   //FIXME: populate with a real test
 })
