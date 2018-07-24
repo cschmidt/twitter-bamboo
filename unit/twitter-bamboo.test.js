@@ -1,8 +1,10 @@
 'use strict'
-/* global test expect beforeAll jest */
+/* global test expect beforeAll beforeEach jest */
 const TwitterBamboo = require('../lib/twitter-bamboo')
 const config = require('../config.json')
 const ssm = require('aws-ssm-params')
+
+let twitterBamboo = {}
 
 const sampleEmployees = [{
   id: 'id1',
@@ -24,18 +26,19 @@ const sampleListMembers = [{
   screen_name: 'productpartho'
 }]
 
-function bambooApiMock() {
+function mockObjWithFn(functionName, impl) {
   const mock = {}
-  mock.employees = jest.fn()
-  mock.employees.mockImplementation(() => Promise.resolve(sampleEmployees))
+  mock[functionName] = jest.fn()
+  mock[functionName].mockImplementation(impl)
   return mock
 }
 
+function bambooApiMock() {
+  return mockObjWithFn('employees', () => Promise.resolve(sampleEmployees))
+}
+
 function twitterApiMock() {
-  const mock = {}
-  mock.listMembers = jest.fn()
-  mock.listMembers.mockImplementation(() => Promise.resolve(sampleListMembers))
-  return mock
+  return mockObjWithFn('listMembers', () => Promise.resolve(sampleListMembers))
 }
 
 beforeAll(() => {
@@ -44,8 +47,13 @@ beforeAll(() => {
   })
 })
 
+beforeEach(() => {
+  twitterBamboo = new TwitterBamboo(config)
+  twitterBamboo.bambooApi = bambooApiMock()
+  twitterBamboo.twitterApi = twitterApiMock()
+})
+
 test('parses screen names', () => {
-  const twitterBamboo = new TwitterBamboo(config)
   let screenNames = ['screenName', '@screenName', 'http://twitter.com/screenName',
     'https://twitter.com/screenName'
   ]
@@ -55,15 +63,11 @@ test('parses screen names', () => {
 })
 
 test('indexes employees and list members by screen name', () => {
-  //FIXME: populate with a real test
-  const twitterBamboo = new TwitterBamboo(config)
-  twitterBamboo.bambooApi = bambooApiMock()
-  twitterBamboo.twitterApi = twitterApiMock()
-
   return twitterBamboo.exec().then(twitterBamboo => {
     expect(twitterBamboo.employeesByScreenName.size).toBe(1)
-    let leslie = twitterBamboo.employeesByScreenName.values().next().value
+    let leslie = twitterBamboo.employeesByScreenName.get('Lesamatron')
     expect(leslie['twitterFeed']).toBe('@Lesamatron')
     expect(twitterBamboo.listMembersByScreenName.size).toBe(1)
+    expect(twitterBamboo.listMembersByScreenName.get('productpartho')['name']).toBe('Partho Ghosh')
   })
 })
