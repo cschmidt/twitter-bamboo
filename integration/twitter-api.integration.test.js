@@ -1,6 +1,6 @@
 'use strict'
 /* global test expect beforeAll*/
-const { loadConfig } = require('../lib/util')
+const { loadConfig } = require('../lib/config')
 const config = {}
 const Twitter = require('../lib/twitter-api')
 

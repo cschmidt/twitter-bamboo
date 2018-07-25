@@ -1,13 +1,13 @@
 'use strict'
 /* global beforeAll test expect */
 // FIXME: ugh, is there an alternative to relative pathing?
-const { loadConfig } = require('../lib/util')
-const config = {}
+const { loadConfig } = require('../lib/config')
+let config = {}
 const Bamboo = require('../lib/bamboo-api')
 
 beforeAll(() => {
   return loadConfig().then(loaded_config => {
-    Object.assign(config, loaded_config)
+    config = loaded_config
   })
 })
 
